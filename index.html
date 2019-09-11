@@ -6,21 +6,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
- 
+
 </head>
 
 <body>
-    <label>
-        Pick a color
-        <input type="color" id="picker" value="#00fa92">
-    </label>
-    <ul>
-        <li class="values RGB">R: 1 G: 2 B: 3</li>
-        <li class="values HEX">#12132</li>
-        <li class="values HSL">H: 1% S:2% L:3%</li>
-    </ul>
+    <section class="options">
+        <div class="picker">
+    <p> Pick a color</p>
+            <input type="color" id="picker" value="#00fa92">
+        </div>
+
+        <div class="harmony">
+            <p>Pick a harmony</p>
+        <select class="harmony__select">
+            <option value="analogous">Analogous</option>
+            <option value="monochromatic">Monochromatic</option>
+            <option value="triad">Triad</option>
+            <option value="complementary">Complementary</option>
+            <option value="compound">Compound</option>
+            <option value="shades">Shades</option>
+        </select>
+    </div>
+    </section>
+
+    <section class="scheme">
+        <div class="scheme__color">
+            <div class="scheme__color__box scheme__color__box-1" > </div>
+            <ul class="scheme__color__values">
+            <li class="HEX"></li>
+            <li class="RGB" ></li>
+            <li class="HSL"></li></ul>
+        </div>
+
+        <div class="scheme__color">
+            <div class="scheme__color__box scheme__color__box-2" > </div>
+            <ul class="scheme__color__values">
+                    <li class="HEX"></li>
+                    <li class="RGB" ></li>
+                    <li class="HSL"></li>
+            </ul>
+        </div>
+        <div class="scheme__color">
+            <div class="scheme__color__box scheme__color__box-3"></div>
+            <ul class="scheme__color__values">
+                    <li class="HEX"></li>
+                    <li class="RGB" ></li>
+                    <li class="HSL"></li>
+            </ul>
+
+        </div>
+        <div class="scheme__color">
+            <div class="scheme__color__box scheme__color__box-4" ></div>
+            <ul class="scheme__color__values">
+                    <li class="HEX"></li>
+                    <li class="RGB" ></li>
+                    <li class="HSL"></li>
+            </ul>
+        </div>
+        <div class="scheme__color">
+            <div class="scheme__color__box scheme__color__box-5"></div>
+            <ul class="scheme__color__values">
+                    <li class="HEX"></li>
+                    <li class="RGB" ></li>
+                    <li class="HSL"></li>
+            </ul>
+        </div>
+    </section>
+ 
+
     </div>
 </body>
 <script src="main.js"></script>
+
 </html>

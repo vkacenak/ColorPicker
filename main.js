@@ -1,25 +1,124 @@
-let r,g,b;
-
+let r,g,b,m,shiftedH, shiftedL,shiftedS;
+let newHSL = [];
 const root = document.documentElement;
-const list = document.querySelectorAll(".values");
-console.log(list);
 const colorInput = document.querySelector("#picker");
-console.log(colorInput)
+const list = document.querySelectorAll(".values");
+const harmony = document.querySelector(".harmony__select");
+const boxes = document.querySelectorAll(".scheme__color__box");
+const values = document.querySelectorAll(".scheme__color__values");
+const HEXList = document.querySelectorAll(".HEX");
+const RGBList = document.querySelectorAll(".RGB");
+const HSLList = document.querySelectorAll(".HSL");
 
-const changeValue = () => {
-
-let hex = colorInput.value;
-  let rgb = hexToRGB(hex);
-  let hsl = RGBToHSL(hex);
 
 
-  root.style.setProperty("--color", hex);
-  list[1].textContent = hex;
-  list[0].textContent = rgb;
-  list[2].textContent = hsl;
+
+function init(){
+// MAKE HARMONY OF DEFAULT COLOR
+baseHSL = changeValue();
+controller(baseHSL);
+
+//EVENT LISTENERS FOR CHANGING COLORS AND HARMONY
+colorInput.addEventListener("change", function(){
+    baseHSL = changeValue();
+    controller(baseHSL);
+}); 
+harmony.addEventListener("change", function(){
+    controller(baseHSL);
+});
+
+
 }
 
-function hexToRGB(val){
+function controller(baseHSL) {
+
+    console.log("Deciding which harmony are we doing")
+    harmonyType = harmony.options[harmony.selectedIndex].value
+    switch (harmonyType) {
+        case "analogous":
+            newHSL = analogous(baseHSL);
+            console.log("new hsl got here" + newHSL);
+            break;
+        case "monochromatic":
+           newHSL = mono(baseHSL);
+            break;
+        case "triad":
+            newHSL = triad(baseHSL);
+            break;
+        case "complementary":
+            newHSL = complementary(baseHSL);
+            break;
+        case "compound":
+            newHSL = compound(baseHSL);
+            break;
+        case "shades":
+            newHSL = shades(baseHSL);
+            break;
+
+    }
+    DOMChanges(newHSL);
+}
+
+function changeValue() {
+
+    let baseHEX = colorInput.value;
+    hexToRGB(baseHEX);
+    let baseHSL = RGBToHSL(baseHEX);
+    console.log(baseHSL);
+    root.style.setProperty(`--color`, baseHEX);
+    return baseHSL;
+}
+function DOMChanges(newHSL){
+    for (i=0; i < 5; i++){
+    console.log("DOM " + newHSL[i]);
+    boxes[i].style.backgroundColor = newHSL[i];
+    newRGB = boxes[i].style.backgroundColor;
+    HSLList[i].textContent = newHSL[i];
+    RGBList[i].textContent = newRGB;
+    newHEX = RGBToHex(newRGB);
+    HEXList[i].textContent = newHEX;
+    }
+}
+// HARMONIES
+function analogous(baseHSL) {
+    for (i=0; i < 5; i++){
+        m = i-2;
+        shiftedH = baseHSL.h - m*30;
+        newHSL[i] = `hsl(${shiftedH},${baseHSL.s}%, ${baseHSL.l}%)`;
+       
+    }
+    return newHSL;
+}
+
+
+function mono(baseHSL){
+    for (i=-2; i < 3; i++){
+        m = i-2;
+        shiftedL = baseHSL.l - m*30;
+        newHSL[i] = `hsl(${baseHSL.h},${baseHSL.s}%, ${shiftedL}%)`;
+    }
+    return newHSL;
+}
+function triad(baseHSL){
+    for (i=-2; i < 3; i++){
+        m = i-2;
+        shiftedH = baseHSL.h - m*60;
+        newHSL[i] = `hsl(${shiftedH},${baseHSL.s}%, ${baseHSL.l}%)`;
+    }
+    return newHSL;
+
+}
+function complementary(baseHSL){
+    for (i=-2; i < 3; i++){
+        m = i-2;
+        let shiftedL = baseHSL.l - m*30;
+        newHSL[i] = `hsl(${baseHSL.h},${baseHSL.s}%, ${shiftedL}%)`;
+    }
+    return newHSL;
+
+}
+
+function hexToRGB(val) {
     r = "0x" + val[1] + val[2];
     g = "0x" + val[3] + val[4];
     b = "0x" + val[5] + val[6];
@@ -27,12 +126,12 @@ function hexToRGB(val){
     return " " + +r + "," + +g + "," + +b;
 }
 
-function RGBToHSL(){
-    
+function RGBToHSL() {
+
     r /= 255;
     g /= 255;
     b /= 255;
-      
+
     let cmin = Math.min(r, g, b),
         cmax = Math.max(r, g, b),
         delta = cmax - cmin,
@@ -64,13 +163,37 @@ function RGBToHSL(){
     s = delta == 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
 
 
-    s =+ (s * 100).toFixed(1);
-    l =+ (l * 100).toFixed(1);
+    s = +(s * 100).toFixed(1);
+    l = +(l * 100).toFixed(1);
 
-    return + h + "°," + s + "%," + l + "%";
+    return {
+        h,
+        s,
+        l
+    };
 
 }
 
-changeValue();
+function RGBToHex(rgb) {
 
-colorInput.addEventListener("change", changeValue);
+console.log(rgb);
+    let sep = rgb.indexOf(",") > -1 ? "," : " ";
+     // Turn "rgb(r,g,b)" into [r,g,b]
+    rgb = rgb.substr(4).split(")")[0].split(sep);
+
+    r = (+rgb[0]).toString(16);
+      g = (+rgb[1]).toString(16);
+      b = (+rgb[2]).toString(16);
+
+    if (r.length == 1)
+      r = "0" + r;
+    if (g.length == 1)
+      g = "0" + g;
+    if (b.length == 1)
+      b = "0" + b;
+
+    return "#" + r + g + b;
+  }
+
+
+init();
