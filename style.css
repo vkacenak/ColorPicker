@@ -69,6 +69,10 @@ select {
 .scheme__color__box-2{
     background-color: var(--color-1);   
 }
+
+.scheme__color__box-3{  
+}
+
 .scheme__color__box-4{
     background-color: var(--color1);   
 }

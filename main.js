@@ -1,4 +1,4 @@
-let r,g,b,m,shiftedH, shiftedL,shiftedS;
+let m,shiftedH, shiftedL,shiftedS;
 let newHSL = [];
 const root = document.documentElement;
 const colorInput = document.querySelector("#picker");
@@ -61,8 +61,9 @@ function controller(baseHSL) {
 function changeValue() {
 // CHANGING AND CONVERTING BASE COLOR 
     let baseHEX = colorInput.value;
-    hexToRGB(baseHEX);
-    let baseHSL = RGBToHSL(baseHEX);
+    let baseRGB = hexToRGB(baseHEX);
+    console.log(baseRGB);
+    let baseHSL = RGBToHSL(baseRGB);
     console.log(baseHSL);
     root.style.setProperty(`--color`, baseHEX);
 
@@ -126,14 +127,14 @@ function hexToRGB(val) {
     g = "0x" + val[3] + val[4];
     b = "0x" + val[5] + val[6];
 
-    return " " + +r + "," + +g + "," + +b;
+    return {r,g,b};
 }
 
-function RGBToHSL() {
+function RGBToHSL(baseRGB) {
 
-    r /= 255;
-    g /= 255;
-    b /= 255;
+let r = baseRGB.r / 255,
+    g = baseRGB.g / 255,
+    b = baseRGB.b / 255;
 
     let cmin = Math.min(r, g, b),
         cmax = Math.max(r, g, b),
