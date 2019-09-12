@@ -14,7 +14,7 @@ const HSLList = document.querySelectorAll(".HSL");
 
 
 function init(){
-// MAKE HARMONY OF DEFAULT COLOR
+// MAKE CONVERSIONS AND HARMONY OF A DEFAULT INPUT COLOR
 baseHSL = changeValue();
 controller(baseHSL);
 
@@ -31,13 +31,12 @@ harmony.addEventListener("change", function(){
 }
 
 function controller(baseHSL) {
+    // DECIDE WHICH HARMONY IS SELECTED
+    harmonyType = harmony.options[harmony.selectedIndex].value;
 
-    console.log("Deciding which harmony are we doing")
-    harmonyType = harmony.options[harmony.selectedIndex].value
     switch (harmonyType) {
         case "analogous":
             newHSL = analogous(baseHSL);
-            console.log("new hsl got here" + newHSL);
             break;
         case "monochromatic":
            newHSL = mono(baseHSL);
@@ -60,25 +59,29 @@ function controller(baseHSL) {
 }
 
 function changeValue() {
-
+// CHANGING AND CONVERTING BASE COLOR 
     let baseHEX = colorInput.value;
     hexToRGB(baseHEX);
     let baseHSL = RGBToHSL(baseHEX);
     console.log(baseHSL);
     root.style.setProperty(`--color`, baseHEX);
+
+
     return baseHSL;
 }
 function DOMChanges(newHSL){
+    // CHANGING THE BACKGROUNDS AND VALUES OF ALL BOXES
     for (i=0; i < 5; i++){
-    console.log("DOM " + newHSL[i]);
     boxes[i].style.backgroundColor = newHSL[i];
     newRGB = boxes[i].style.backgroundColor;
+    
     HSLList[i].textContent = newHSL[i];
     RGBList[i].textContent = newRGB;
     newHEX = RGBToHex(newRGB);
     HEXList[i].textContent = newHEX;
     }
 }
+
 // HARMONIES
 function analogous(baseHSL) {
     for (i=0; i < 5; i++){
@@ -92,7 +95,7 @@ function analogous(baseHSL) {
 
 
 function mono(baseHSL){
-    for (i=-2; i < 3; i++){
+    for (i=0; i < 5; i++){
         m = i-2;
         shiftedL = baseHSL.l - m*30;
         newHSL[i] = `hsl(${baseHSL.h},${baseHSL.s}%, ${shiftedL}%)`;
@@ -100,7 +103,7 @@ function mono(baseHSL){
     return newHSL;
 }
 function triad(baseHSL){
-    for (i=-2; i < 3; i++){
+    for (i=0; i < 5; i++){
         m = i-2;
         shiftedH = baseHSL.h - m*60;
         newHSL[i] = `hsl(${shiftedH},${baseHSL.s}%, ${baseHSL.l}%)`;
@@ -109,10 +112,10 @@ function triad(baseHSL){
 
 }
 function complementary(baseHSL){
-    for (i=-2; i < 3; i++){
+    for (i=0; i < 5; i++){
         m = i-2;
-        let shiftedL = baseHSL.l - m*30;
-        newHSL[i] = `hsl(${baseHSL.h},${baseHSL.s}%, ${shiftedL}%)`;
+        let shiftedH = baseHSL.h + 180*m;
+        newHSL[i] = `hsl(${shiftedH},${baseHSL.s}%, ${baseHSL.l}%)`;
     }
     return newHSL;
 

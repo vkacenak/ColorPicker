@@ -51,14 +51,15 @@ select {
 .scheme__color__values {
     list-style-type: none;
     font-weight: 700;
+    font-size: 14px;
     text-transform: uppercase;
 }
 
 .scheme__color__box {
     border-radius: 15px;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    width: 150px;
-    height: 150px;
+    width: 180px;
+    height: 180px;
     margin: 20px;
     background-color: var(--color);
 }
